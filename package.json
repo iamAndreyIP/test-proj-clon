@@ -10,7 +10,14 @@
     "start": "parcel build && node server.js"
   },
   "engines": {
-    "node": ">=16.15.1"
+    "node": ">=14.0"
+  },
+  "targets": {
+    "default": {
+      "engines": {
+        "browsers": ">=50%"
+      }
+    }
   },
   "keywords": [],
   "author": "",
