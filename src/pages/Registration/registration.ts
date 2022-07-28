@@ -129,7 +129,6 @@ export const registration = new Registration({
         console.log(regFormData);
       } else {
         console.log({});
-        console.log(regFormData);
       }
     },
   },
