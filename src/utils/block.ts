@@ -3,6 +3,7 @@ import { v4 as makeUUID } from "uuid";
 import Handlebars from "handlebars";
 
 import EventBus from "./eventBus";
+import { isEqual } from "./helpers";
 
 class Block {
   static EVENTS = {
@@ -11,6 +12,8 @@ class Block {
     FLOW_CDU: "flow:component-did-update",
     FLOW_RENDER: "flow:render",
   };
+
+  // public static ComponentName = this.name;
 
   private _element: HTMLElement | null = null;
   private _meta: { props: any };
@@ -59,12 +62,11 @@ class Block {
         props[key] = value;
       }
     });
-
     return { props, children };
   }
 
   init() {
-    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
   private _componentDidMount() {
@@ -73,6 +75,7 @@ class Block {
     Object.values(this.children).forEach((child) => {
       child.dispatchComponentDidMount();
     });
+    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
   componentDidMount(oldProps?: any) {}
@@ -82,12 +85,18 @@ class Block {
   }
 
   private _componentDidUpdate(oldProps: any, newProps: any) {
-    if (this.componentDidUpdate(oldProps, newProps)) {
-      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    // if (this.componentDidUpdate(oldProps, newProps)) {
+    //   this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    // }
+    const response = this.componentDidUpdate(oldProps, newProps);
+    if (!response) {
+      return;
     }
+    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
   componentDidUpdate(oldProps: any, newProps: any) {
+    // return !isEqual(oldProps, newProps);
     return true;
   }
 
@@ -95,8 +104,18 @@ class Block {
     if (!nextProps) {
       return;
     }
-
     Object.assign(this.props, nextProps);
+
+    // if (!nextProps) {
+    //   return;
+    // }
+    // this.oldProps = Object.assign({}, this.props);
+
+    // Object.keys(nextProps).forEach((key) => {
+    //   this.props[key] = nextProps[key];
+    // });
+    // this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   };
 
   get element(): HTMLElement | null {
@@ -210,6 +229,10 @@ class Block {
 
   hide() {
     this.getContent()!.style.display = "none";
+  }
+
+  getName() {
+    // return Block.ComponentName;
   }
 }
 

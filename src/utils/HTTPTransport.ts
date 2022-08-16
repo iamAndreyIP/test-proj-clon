@@ -23,7 +23,7 @@ type Options = {
   timeout?: number;
 };
 
-class HTTPTransport {
+export default class HTTPTransport {
   get = (url: string, options: Options = {}) => {
     return this.request(
       url,

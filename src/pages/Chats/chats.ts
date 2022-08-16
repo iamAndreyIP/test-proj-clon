@@ -1,3 +1,4 @@
+import { list } from "../../components/List/list";
 import Block from "../../utils/block";
 import { template } from "./chatsTemplate";
 
@@ -16,4 +17,6 @@ class Chats extends Block {
   }
 }
 
-export const chats = new Chats({});
+export const chats = new Chats({
+  chatList: list,
+});

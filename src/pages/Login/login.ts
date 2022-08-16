@@ -5,9 +5,11 @@ import Input from "../../components/Input/input";
 import Button from "../../components/Button/button";
 import validator from "../../utils/validate";
 import Link from "../../components/Link/link";
-import { getLocation } from "../../app";
+import { router } from "../../..";
+import store from "../../utils/store";
 
 class Login extends Block {
+  public static ComponentName = this.name;
   constructor(props: {}) {
     super(props);
   }
@@ -19,6 +21,10 @@ class Login extends Block {
   show() {
     //Переопределение свойства 'block' из родительского класса
     this.getContent()!.style.display = "flex";
+  }
+
+  getName() {
+    return Login.ComponentName;
   }
 }
 
@@ -66,13 +72,14 @@ export const login = new Login({
     events: {
       click: function (e: Event) {
         e.preventDefault();
-        window.history.pushState(null, "", "reg");
-        getLocation();
+        router.go("/signup");
       },
     },
   }),
   events: {
     submit: function (e: { preventDefault: () => void }) {
+      console.log("sumbit");
+
       e.preventDefault();
       const isValidAll: any[] = [];
       const regFormData: { [key: string]: string } = {};
@@ -84,10 +91,24 @@ export const login = new Login({
           regFormData[input.name] = input.value;
         }
       });
+      console.log(regFormData);
+
       if (isValidAll.every((isValid) => isValid === true)) {
         console.log(regFormData);
+        const { login, password } = regFormData;
+        const { users } = store.getState();
+        const user = users.filter(
+          (u: any) => u.login === login && u.password === password
+        );
+        console.log(user);
+        if (user.length) {
+          router.go("/chats");
+        } else {
+          console.log("user not found");
+        }
       } else {
         console.log({});
+        // console.log(regFormData);
       }
     },
   },

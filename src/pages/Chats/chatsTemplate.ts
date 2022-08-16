@@ -12,70 +12,7 @@ export const template = `
           />
         </div>
         <div class="chats__menu-list">
-          <ul class="chats__menu-list chats-list">
-            <li class="chats-list__item">
-              <div class="chats-list__item-img">
-                <img class="chats-list__item-avatar" alt="" />
-              </div>
-              <div class="chats-list__item-info chats-info">
-                <div class="chats-info__title">Андрей</div>
-                <div class="chats-info__note">Изображение</div>
-              </div>
-              <div class="chats-list__item-date chats-date">
-                <div class="chats-date__time">10:40</div>
-                <div class="chats-date__ring">2</div>
-              </div>
-            </li>
-            <li class="chats-list__item">
-              <div class="chats-list__item-img">
-                <img class="chats-list__item-avatar" alt="" />
-              </div>
-              <div class="chats-list__item-info chats-info">
-                <h3 class="chats-info__title">тет-а-теты</h3>
-                <div class="chats-info__note">И Human Interface Guidelines и Material design рекомендуют</div>
-              </div>
-              <div class="chats-list__item-date chats-date">
-                <div class="chats-date__time">10:40</div>
-              </div>
-            </li>
-            <li class="chats-list__item">
-              <div class="chats-list__item-img">
-                <img class="chats-list__item-avatar" alt="" />
-              </div>
-              <div class="chats-list__item-info chats-info">
-                <h3 class="chats-info__title">Киноклуб</h3>
-                <div class="chats-info__note">Вы: стикер</div>
-              </div>
-              <div class="chats-list__item-date chats-date">
-                <div class="chats-date__time">20:40</div>
-              </div>
-            </li>
-            <li class="chats-list__item">
-              <div class="chats-list__item-img">
-                <img class="chats-list__item-avatar" alt="" />
-              </div>
-              <div class="chats-list__item-info chats-info">
-                <h3 class="chats-info__title">Design Destroer</h3>
-                <div class="chats-info__note">В 2008 году художник Jon Rafman начал собирать</div>
-              </div>
-              <div class="chats-list__item-date chats-date">
-                <div class="chats-date__time">00:00</div>
-                <div class="chats-date__ring">9</div>
-              </div>
-            </li>
-            <li class="chats-list__item">
-              <div class="chats-list__item-img">
-                <img class="chats-list__item-avatar" alt="" />
-              </div>
-              <div class="chats-list__item-info chats-info">
-                <h3 class="chats-info__title">1, 2, 3</h3>
-                <div class="chats-info__note">Миллионы ежедневно проводят десятки часов...</div>
-              </div>
-              <div class="chats-list__item-date chats-date">
-                <div class="chats-date__time">Пн</div>
-              </div>
-            </li>
-          </ul>
+          {{{chatList}}}
         </div>
       </div>
       <div class="chats__content">

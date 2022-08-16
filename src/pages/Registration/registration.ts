@@ -4,14 +4,17 @@ import Input from "../../components/Input/input";
 import Link from "../../components/Link/link";
 import validator from "../../utils/validate";
 import { template } from "./registrationTemplate";
-
 import { checkInputBlur, checkInputFocus } from "../Login/login";
+import { router } from "../../..";
+import store, { StoreEvents } from "../../utils/store";
 
-import { getLocation } from "../../app";
-
-class Registration extends Block {
+export default class Registration extends Block {
   constructor(props: {} | undefined) {
-    super(props);
+    super({ ...props, ...store.getState() });
+
+    store.on(StoreEvents.UPDATED, () => {
+      this.setProps({ ...store.getState() });
+    });
   }
 
   render() {
@@ -107,8 +110,7 @@ export const registration = new Registration({
     events: {
       click: function (e) {
         e.preventDefault();
-        window.history.pushState(null, "", "login");
-        getLocation();
+        router.go("/");
       },
     },
   }),
@@ -127,9 +129,15 @@ export const registration = new Registration({
       });
       if (isValidAll.every((isValid) => isValid === true)) {
         console.log(regFormData);
+        const { users } = store.getState();
+        //@ts-ignore
+        users.push(regFormData);
+        console.log(store.getState());
+        router.go("/");
       } else {
         console.log({});
       }
     },
   },
 });
+//11111111Q
