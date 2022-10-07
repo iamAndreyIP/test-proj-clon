@@ -1,19 +1,16 @@
-import { v4 as makeUUID } from "uuid";
+import { v4 as makeUUID } from 'uuid';
 
-import Handlebars from "handlebars";
+import Handlebars from 'handlebars';
 
-import EventBus from "./eventBus";
-import { isEqual } from "./helpers";
+import EventBus from './eventBus';
 
 class Block {
   static EVENTS = {
-    INIT: "init",
-    FLOW_CDM: "flow:component-did-mount",
-    FLOW_CDU: "flow:component-did-update",
-    FLOW_RENDER: "flow:render",
+    INIT: 'init',
+    FLOW_CDM: 'flow:component-did-mount',
+    FLOW_CDU: 'flow:component-did-update',
+    FLOW_RENDER: 'flow:render',
   };
-
-  // public static ComponentName = this.name;
 
   private _element: HTMLElement | null = null;
   private _meta: { props: any };
@@ -56,7 +53,13 @@ class Block {
     const props: any = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
-      if (value instanceof Block) {
+      if (
+        Array.isArray(value) &&
+        value.length > 0 &&
+        value.every((chldr) => chldr instanceof Block)
+      ) {
+        children[key] = value;
+      } else if (value instanceof Block) {
         children[key] = value;
       } else {
         props[key] = value;
@@ -66,28 +69,34 @@ class Block {
   }
 
   init() {
-    this.eventBus().emit(Block.EVENTS.FLOW_CDM);
+    this.addChild();
+
+    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
+
+  protected addChild() {}
 
   private _componentDidMount() {
     this.componentDidMount();
-
-    Object.values(this.children).forEach((child) => {
-      child.dispatchComponentDidMount();
-    });
-    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
   componentDidMount(oldProps?: any) {}
 
-  dispatchComponentDidMount() {
+  public dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
+
+    Object.values(this.children).forEach((child) => {
+      if (Array.isArray(child)) {
+        child.forEach((ch) => {
+          ch.dispatchComponentDidMount();
+        });
+      } else {
+        child.dispatchComponentDidMount();
+      }
+    });
   }
 
   private _componentDidUpdate(oldProps: any, newProps: any) {
-    // if (this.componentDidUpdate(oldProps, newProps)) {
-    //   this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
-    // }
     const response = this.componentDidUpdate(oldProps, newProps);
     if (!response) {
       return;
@@ -96,7 +105,6 @@ class Block {
   }
 
   componentDidUpdate(oldProps: any, newProps: any) {
-    // return !isEqual(oldProps, newProps);
     return true;
   }
 
@@ -104,17 +112,16 @@ class Block {
     if (!nextProps) {
       return;
     }
+
     Object.assign(this.props, nextProps);
+  };
 
-    // if (!nextProps) {
-    //   return;
-    // }
-    // this.oldProps = Object.assign({}, this.props);
+  setChildren = (child) => {
+    if (!child) {
+      return;
+    }
 
-    // Object.keys(nextProps).forEach((key) => {
-    //   this.props[key] = nextProps[key];
-    // });
-    // this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    Object.assign(this.children, child);
     this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   };
 
@@ -150,7 +157,7 @@ class Block {
     return new Proxy(props as unknown as object, {
       get(target: Record<string, unknown>, prop: string) {
         const value = target[prop];
-        return typeof value === "function" ? value.bind(target) : value;
+        return typeof value === 'function' ? value.bind(target) : value;
       },
 
       set(target: Record<string, unknown>, prop: string, value: unknown) {
@@ -164,7 +171,7 @@ class Block {
       },
 
       deleteProperty() {
-        throw new Error("permission denaed");
+        throw new Error('permission denaed');
       },
     });
   }
@@ -193,7 +200,7 @@ class Block {
 
   private _createDocumentElement(tagName: string): HTMLElement {
     const element = document.createElement(tagName);
-    element.setAttribute("data-id", this._id!);
+    element.setAttribute('data-id', this._id!);
     return element;
   }
 
@@ -201,38 +208,56 @@ class Block {
     const propsAndStubs = { ...props };
 
     Object.entries(this.children).forEach(([key, child]) => {
-      propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
+      if (Array.isArray(child)) {
+        const componentList: string[] = [];
+        child.forEach((el) => {
+          componentList.push(`<div data-id="${el._id}"></div>`);
+        });
+        propsAndStubs[key] = componentList;
+      } else {
+        propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
+      }
     });
 
     const fragment = this._createDocumentElement(
-      "template"
+      'template'
     ) as HTMLTemplateElement;
 
     fragment.innerHTML = Handlebars.compile(template)(propsAndStubs);
 
-    Object.values(this.children).forEach((child) => {
-      const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
+    Object.entries(this.children).forEach(([_, child]) => {
+      if (Array.isArray(child)) {
+        child.forEach((el) => {
+          const stub = fragment.content.querySelector(`[data-id="${el._id}"]`);
 
-      if (!stub) {
-        return;
+          if (!stub) {
+            return;
+          }
+
+          el.getContent()?.append(...Array.from(stub.childNodes));
+          stub.replaceWith(el.getContent());
+        });
+      } else {
+        const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
+
+        if (!stub) {
+          return;
+        }
+        child.getContent()?.append(...Array.from(stub.childNodes));
+
+        stub.replaceWith(child.getContent()!);
       }
-
-      stub.replaceWith(child.getContent()!);
     });
 
     return fragment.content;
   }
 
   show() {
-    this.getContent()!.style.display = "block";
+    this.getContent()!.style.display = 'block';
   }
 
   hide() {
-    this.getContent()!.style.display = "none";
-  }
-
-  getName() {
-    // return Block.ComponentName;
+    this.getContent()!.style.display = 'none';
   }
 }
 

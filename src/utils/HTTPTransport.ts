@@ -1,19 +1,19 @@
 enum Methods {
-  GET = "GET",
-  PUT = "PUT",
-  POST = "POST",
-  DELETE = "DELETE",
+  GET = 'GET',
+  PUT = 'PUT',
+  POST = 'POST',
+  DELETE = 'DELETE',
 }
 
 function queryStringify(data: any): string {
-  if (typeof data !== "object") {
-    throw new Error("Data must be object");
+  if (typeof data !== 'object') {
+    throw new Error('Data must be object');
   }
 
   const keys = Object.keys(data);
   return keys.reduce((result, key, index) => {
-    return `${result}${key}=${data[key]}${index < keys.length - 1 ? "&" : ""}`;
-  }, "?");
+    return `${result}${key}=${data[key]}${index < keys.length - 1 ? '&' : ''}`;
+  }, '?');
 }
 
 type Options = {
@@ -49,7 +49,7 @@ export default class HTTPTransport {
 
     return new Promise(function (resolve, reject) {
       if (!method) {
-        reject("No method");
+        reject('No method');
         return;
       }
 
@@ -71,6 +71,8 @@ export default class HTTPTransport {
 
       xhr.timeout = timeout;
       xhr.ontimeout = reject;
+
+      xhr.withCredentials = true;
 
       if (isGet || !data) {
         xhr.send();

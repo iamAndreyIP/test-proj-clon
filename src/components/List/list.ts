@@ -1,46 +1,47 @@
-import Block from "../../utils/block";
-import store, { StoreEvents } from "../../utils/store";
+import Block from '../../utils/block';
+
+import store, { StoreEvents } from '../../utils/store';
 
 const template = `
-<ul class="chats__menu-list chats-list">
-   {{#each chats}}
-        {{log chats}}
-        <li class="chats-list__item" data-li={{id}}>
-          <div class="chats-list__item-img">
-            <img class="chats-list__item-avatar" alt="" />
-          </div>
-          <div class="chats-list__item-info chats-info">
-            <div class="chats-info__title">{{name}}</div>
-            <div class="chats-info__note">{{images}}</div>
-          </div>
-          <div class="chats-list__item-date chats-date">
-            <div class="chats-date__time">{{date}}</div>
-            <div class="chats-date__ring">{{ring}}</div>
-          </div>
-      </li>
-   {{/each}}
+<ul class="menu__list list" width="310">
+    {{{addChatButton}}}
+
+    {{#if listOfChat.length}}
+        {{#each listOfChat}}
+            {{{this}}}
+        {{/each}}
+    {{else}}
+        <div class="msg__no-pick-chat" style="text-align:center">Пока что нет ни одного чата</div>
+    {{/if}}
+
 </ul>
 `;
 
-function mapTestToProps(state) {
+function mapStateToProps(state) {
   return {
-    chats: state.chats,
+    listOfChat: state.listOfChat || [],
   };
 }
 
-class List extends Block {
-  constructor(props) {
-    super({ ...props, ...mapTestToProps(store.getState()) });
+type listType = {
+  addChatButton: Block;
+  listOfChat?: Block[];
+  events?: { [key: string]: (e: Event) => void };
+};
+
+export default class List extends Block {
+  constructor(props: listType) {
+    super({
+      ...props,
+      ...mapStateToProps(store.getState()),
+    });
 
     store.on(StoreEvents.UPDATED, () => {
-      this.setProps({ ...mapTestToProps(store.getState()) });
+      this.setChildren(mapStateToProps(store.getState()));
     });
   }
 
-  protected render(): DocumentFragment {
-    console.log(this.props);
+  protected render() {
     return this.compile(template, this.props);
   }
 }
-
-export const list = new List({});

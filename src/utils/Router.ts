@@ -1,4 +1,4 @@
-import Block from "./block";
+import Block from './block';
 
 class Route {
   private pathname: string;
@@ -27,7 +27,7 @@ class Route {
   }
 
   match(pathname: string) {
-    return pathname === this.pathname;
+    return pathname === this.pathname || this.pathname === '*';
   }
 
   render() {
@@ -38,11 +38,10 @@ class Route {
     const root = document.querySelector(this.props.rootQuery);
 
     if (!root) {
-      throw new Error("Root not found");
+      throw new Error('Root not found');
     }
 
-    root.innerHTML = "";
-    // console.log(this.block);
+    root.innerHTML = '';
 
     root.appendChild(this.block.getContent());
   }
@@ -63,7 +62,7 @@ class Router {
   }
 
   public use(pathname: string, block: typeof Block) {
-    const route = new Route(pathname, block, { rootQuery: ".app" });
+    const route = new Route(pathname, block, { rootQuery: '.app' });
 
     this.routes.push(route);
 
@@ -79,7 +78,7 @@ class Router {
   }
 
   public go(pathname: string) {
-    this.history.pushState({}, "", pathname);
+    this.history.pushState({}, '', pathname);
     this._onRoute(pathname);
   }
 

@@ -150,9 +150,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 
     & svg {
       width: 15px;
+    }
+
+    &:hover {
+      transform: scale(1.1);
     }
   }
 
