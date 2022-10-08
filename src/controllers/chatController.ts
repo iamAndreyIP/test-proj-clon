@@ -1,5 +1,5 @@
 import API, { ChatApi } from '../api/chatApi';
-import ListItem from '../components/ListItem/listItem';
+// import ListItem from '../components/ListItem/listItem';
 import store from '../utils/store';
 import MessageController from './messageController';
 
@@ -24,54 +24,11 @@ export class ChatController {
 
   async fetchChats() {
     try {
-      const self = this;
       const response: any = await this.api.read();
 
-      const check = JSON.parse(response.response);
+      const chats = JSON.parse(response.response);
 
-      store.set('newChats', JSON.parse(response.response) || []);
-
-      if (check.length) {
-        const items = store.getState().newChats.map((item) => {
-          if (item.last_message) {
-            const formatTime = item.last_message.time.slice(11, 16);
-            item.last_message.time = formatTime;
-          }
-          return new ListItem({
-            ...item,
-            events: {
-              dblclick: function () {
-                const id: string = this.getAttribute('data-id');
-
-                self.getToken(Number(id));
-
-                const chat = store
-                  .getState()
-                  .newChats.find(
-                    (ch: { id: string | number }) => +ch.id === +id
-                  );
-
-                if (chat.id) {
-                  store.set('pickedChatItem', chat);
-
-                  document.querySelectorAll('.list__item').forEach((item) => {
-                    const iId: any = item.getAttribute('data-id');
-                    if (+iId === +id) {
-                      item.classList.add('www');
-                    } else {
-                      item.classList.remove('www');
-                    }
-                  });
-
-                  store.set('pickedChatFlag', true);
-                }
-              },
-            },
-          });
-        });
-
-        store.set('listOfChat', items);
-      }
+      store.set('listOfChat', chats);
     } catch (error) {
       console.error(error);
     }
@@ -82,7 +39,7 @@ export class ChatController {
       const response: any = await this.api.getToken(chatId);
       const { token } = JSON.parse(response.response);
 
-      MessageController.connect(chatId, token);
+      await MessageController.connect(chatId, token);
     } catch (error) {
       console.error(error);
     }
@@ -115,17 +72,38 @@ export class ChatController {
       if (!res.response.includes('reason')) {
         const users = JSON.parse(res.response);
 
-        console.log('chat ctr users', users);
-
         const logins = users.filter((user) => user.role === 'regular');
 
-        console.log('chat ctr logins', logins);
+        store.set('usersOflist', logins || []);
       } else {
         console.log(res.response);
       }
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async deleteChat(chat: { chatId: string }) {
+    try {
+      const res: any = await this.api.delete(chat);
+
+      if (res.response.includes('reason')) {
+        console.log('bed response', res.response);
+      } else {
+        console.log('ok response', res.response);
+        const newlistOfChat = store
+          .getState()
+          .listOfChat.filter((ch) => Number(ch.id) !== Number(chat.chatId));
+
+        store.set('listOfChat', newlistOfChat);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  setPickedChatId(id: number) {
+    store.set('pickedChatId', id);
   }
 }
 

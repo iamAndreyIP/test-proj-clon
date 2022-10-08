@@ -23,7 +23,7 @@ export class AuthController {
 
         await this.fetchUser();
 
-        router.go('/messenger');
+        router.go('/messanger');
 
         return 'ok';
       }
@@ -43,7 +43,7 @@ export class AuthController {
 
         localStorage.setItem('login', login);
 
-        router.go('/messenger');
+        router.go('/messanger');
       }
     } catch (error) {
       console.error(error.message);

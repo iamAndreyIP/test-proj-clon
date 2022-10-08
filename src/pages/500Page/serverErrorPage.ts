@@ -25,7 +25,7 @@ export default class ServerErrorPage extends Block {
         events: {
           click: function (e: Event) {
             e.preventDefault();
-            router.go('/messenger');
+            router.go('/messanger');
           },
         },
       }),

@@ -1,7 +1,7 @@
 import Block from '../../utils/block';
 import { template } from './chatPageTemplate';
 import Input from '../../components/Input/input';
-import List from '../../components/List/list';
+import { List } from '../../components/List/list';
 import Link from '../../components/Link/link';
 import { router } from '../../../index';
 import Button from '../../components/Button/button';
@@ -23,6 +23,8 @@ function mapStateToProps(state: any) {
     deleteUserToChatFlag: state.deleteUserToChatFlag,
     modalListFlag: state.modalListFlag,
     usersOflist: state.usersOflist,
+    openUsersListFlag: state.openUsersListFlag,
+    listOfChat: state.listOfChat,
   };
 }
 
@@ -40,7 +42,6 @@ export default class ChatPage extends Block {
   }
 
   componentDidMount(oldProps?: any): void {
-    console.log('CHAT PAGE DID MOUNT******');
     ChatController.fetchChats();
   }
 
@@ -111,7 +112,7 @@ export default class ChatPage extends Block {
       modalInput: new Input({
         inputClass: 'input',
         inputName: 'user_modal',
-        inputPlaceholder: 'Введите логин',
+        inputPlaceholder: 'Введите id',
         inputType: 'text',
       }),
       modalButton: new Button({
@@ -119,13 +120,11 @@ export default class ChatPage extends Block {
         buttonText: 'Добавить',
         events: {
           click: (e) => {
-            console.log('click add user to chat');
 
             const input: HTMLInputElement | null =
               document.querySelector('.input');
 
             if (input && input.value) {
-              console.log('req go on');
 
               const value = input.value;
               const id = store.getState().pickedChatItem.id;
@@ -149,8 +148,6 @@ export default class ChatPage extends Block {
         click: (e: { target: Element | null }) => {
           const modal = document.querySelector('.modal');
 
-          console.log('click add modal');
-
           if (e.target === modal) {
             store.set('addUserToChatFlag', false);
           }
@@ -163,7 +160,7 @@ export default class ChatPage extends Block {
       modalInput: new Input({
         inputClass: 'input',
         inputName: 'user_modal',
-        inputPlaceholder: 'Введите логин',
+        inputPlaceholder: 'Введите id',
         inputType: 'text',
       }),
       modalButton: new Button({
@@ -199,7 +196,6 @@ export default class ChatPage extends Block {
   }
 
   protected render(): DocumentFragment {
-    // console.log('RENDER CHAT PAGE');
     return this.compile(template, this.props);
   }
 }

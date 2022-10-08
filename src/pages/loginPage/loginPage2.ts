@@ -99,7 +99,7 @@ export default class LoginPageNew extends Block {
           events: {
             click: (event) => {
               event.preventDefault();
-              router.go('/signup');
+              router.go('/sign-up');
             },
           },
         }),

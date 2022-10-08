@@ -5,19 +5,16 @@ import LoginPageNew from './src/pages/loginPage/loginPage2';
 import RegistrationPageNew from './src/pages/registrationPage/registrationPage2';
 import ProfilePage from './src/pages/profilePage/profilePage';
 import Router from './src/utils/Router';
-import store from './src/utils/store';
 import AuthController from './src/controllers/authcontroller';
 
 export const router = new Router();
 
-//@ts-ignorets ignore
-window.store = store;
 
 document.addEventListener('DOMContentLoaded', () => {
   router
     .use('/', LoginPageNew)
-    .use('/signup', RegistrationPageNew)
-    .use('/messenger', ChatPage)
+    .use('/sign-up', RegistrationPageNew)
+    .use('/messanger', ChatPage)
     .use('/profile', ProfilePage)
     .use('/500', ServerErrorPage)
     .use('*', NotfoundPage);
@@ -27,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   switch (window.location.pathname) {
     case '/':
-    case '/signup':
+    case '/sign-up':
       isProtected = false;
       break;
   }
@@ -37,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     router.start();
     if (!isProtected) {
-      router.go('/messenger');
+      router.go('/messanger');
     }
   } else {
     router.start();

@@ -19,7 +19,7 @@ export const template = `
 
     {{/if}}
 
-    {{#if modalListFlag}}
+    {{#if openUsersListFlag}}
 
         {{{modalList}}}
 

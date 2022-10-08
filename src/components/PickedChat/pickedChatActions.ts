@@ -30,19 +30,36 @@ export default class PickedChatActions extends Block {
       inputName: 'message',
       inputPlaceholder: 'Сообщение',
       inputType: 'text',
+      events: {
+        keypress: function (event: any) {
+          if (this && this.value.length > 0 && event.key === 'Enter') {
+          
+
+            const value: string = (this as HTMLInputElement).value;
+            const chatId = store.getState().pickedChatId;
+
+          
+
+            MessageController.sendMessage(chatId, value);
+
+            this.value = '';
+            this.focus();
+          }
+        },
+      },
     });
 
     this.children.blueArrowIcon = new Icon(
       {
         events: {
-          click: function () {
+          click: function (event: { key: string }) {
             const input: HTMLInputElement | null =
               document.querySelector('.message');
 
             if (input && input.value.length > 0) {
               const value = input.value;
               const chatId = store.getState().pickedChatItem.id;
-
+              //?
               value.length
                 ? MessageController.sendMessage(chatId, value)
                 : null;
