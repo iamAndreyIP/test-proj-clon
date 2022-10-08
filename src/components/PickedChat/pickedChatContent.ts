@@ -1,12 +1,13 @@
 import Block from '../../utils/block';
+import { connect } from '../ModalList/modalList';
 
 const template = `
 <div class="picked-chat__content">
       <div class="chat__date">19 июня</div>
 
-      {{#if messages1.length}}
+      {{#if messages.length}}
 
-        {{#each messages1}}
+        {{#each messages}}
           {{#if this.owner}}
 
           <div class="chat__message">
@@ -49,3 +50,19 @@ export default class PickedChatContent extends Block {
     return this.compile(template, this.props);
   }
 }
+
+const withPickedChat = connect((state) => {
+  const pickedChatId = state.pickedChatId;
+
+  if (!pickedChatId) {
+    return {
+      messages: [],
+      pickedChatId: state.pickedChatId,
+    };
+  }
+
+  return {
+    messages: (state.messages || [])[pickedChatId] || [],
+  };
+});
+export const PickedChatContent2 = withPickedChat(PickedChatContent);

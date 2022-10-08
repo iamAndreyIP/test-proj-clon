@@ -278,6 +278,11 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
+.picked-chat__title:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
 .picked-chat__content {
   overflow-y: scroll;
 
@@ -459,4 +464,19 @@ svg:active {
   top: -10px;
   position: absolute;
   right: 0;
+}
+
+.users-count {
+  position: fixed;
+  border-radius: 50%;
+  color: #3369f3;
+  width: 23px;
+  height: 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #3369f3;
+  top: 70px;
+  font-size: 12px;
+  z-index: 999;
 }

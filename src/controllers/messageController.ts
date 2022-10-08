@@ -51,7 +51,8 @@ class MessageController {
 
   formatMessage(messages: any) {
     const uId = (store.getState().currentUser as unknown as User).id;
-    messages.formatTime = messages.time.slice(11, 16);
+    messages.formatTime =
+      messages.type === 'message' ? messages.time.slice(11, 16) : null;
     +messages.user_id === +uId
       ? (messages.owner = true)
       : (messages.owner = false);
@@ -77,23 +78,15 @@ class MessageController {
       allMessages = messages.map((m) => this.formatMessage(m)).reverse();
     } else {
       console.log('NOT ARRAY', messages);
-
+      //{content: '90824', type: 'user connected}
       allMessages.push(this.formatMessage(messages));
     }
 
     const currentMessages = (store.getState().messages || {})[id] || [];
 
-    console.log('current message', currentMessages);
-    console.log('all massage', allMessages);
-
     allMessages = [...currentMessages, ...allMessages];
 
-    console.log('on message', allMessages);
-
     store.set(`messages.${id}`, allMessages);
-    store.set('messages1', allMessages);
-
-    console.log('on message store', store.getState().messages);
   }
 
   subscribe(transport: WSTransport, id: number) {

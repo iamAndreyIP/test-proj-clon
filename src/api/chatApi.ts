@@ -43,8 +43,15 @@ export class ChatApi extends BaseApi {
     return this.http.get(`${this.endpoint}/${id}/users`);
   }
 
+  delete(chat: { chatId: string }) {
+    return this.http.delete(`${this.endpoint}/`, {
+      data: JSON.stringify(chat),
+      mode: 'cors',
+      headers: { 'Content-type': 'application/json' },
+    });
+  }
+
   update = undefined;
-  delete = undefined;
 }
 
 export default new ChatApi('/chats');

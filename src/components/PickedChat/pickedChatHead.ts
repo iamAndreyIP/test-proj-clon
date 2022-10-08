@@ -1,7 +1,9 @@
 import Block from '../../utils/block';
+import store from '../../utils/store';
 import ChatMenuActions from '../ChatActionsMenu/chatActionsMenu';
 import Icon from '../Icons/icons';
 import { ThreeDots } from '../Icons/iconsTemplates';
+import { withStore } from '../ListItem/listItem';
 
 const template = `
 <div class="picked-chat__head">
@@ -15,6 +17,8 @@ const template = `
         <div class="picked-chat__title">{{pickedChatItem.title}}</div>
     </div>
 
+    <div class="users-count" title="Колличество участников чата">{{usersOflist.length}}</div>
+
     <div class="three-dots__box">
         {{{threeDotsIcon}}}
     </div>
@@ -22,11 +26,23 @@ const template = `
 </div>
 `;
 
-export default class PickedChatHead extends Block {
+export default class PickedChatHeadBase extends Block {
   constructor(props: {} | undefined) {
     super(props);
 
     this.props.chatMenuActionsFlag = true;
+
+    this.props.events = {
+      click: function (e) {
+        const title = document.querySelector('.picked-chat__title');
+
+        const flag = store.getState().openUsersListFlag;
+
+        if (e.target === title && !flag) {
+          store.set('openUsersListFlag', true);
+        }
+      },
+    };
   }
 
   protected addChild(): void {
@@ -52,3 +68,5 @@ export default class PickedChatHead extends Block {
     return this.compile(template, this.props);
   }
 }
+
+export const PickedChatHead = withStore(PickedChatHeadBase);

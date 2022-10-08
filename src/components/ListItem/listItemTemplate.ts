@@ -1,5 +1,5 @@
 export const template = `
-<li class="list__item" data-id="{{id}}">
+<li class="list__item{{#if isPicked}} www {{/if}}" data-id="{{id}}">
     <div class="list__item-avatar2">
         
     </div>

@@ -89,14 +89,8 @@ export default class ProfilePage extends Block {
         events: {
           click: function (e) {
             e.preventDefault();
-            console.log('click avatar change');
 
             store.set('changeAvatarModalFlag', true);
-
-            const modal = document.querySelector('.modal');
-            if (modal) {
-              modal.classList.remove('hidde');
-            }
           },
         },
       }),
@@ -114,10 +108,6 @@ export default class ProfilePage extends Block {
             ].forEach((input: any) => {
               obj[input.name] = input.value;
             });
-
-            console.log('changeDataFlag', store.getState().changeDataFlag);
-
-            console.log(inputs);
 
             const answer = confirm('are you sure change data?');
 
@@ -183,8 +173,6 @@ export default class ProfilePage extends Block {
         buttonText: 'Сохранить',
         events: {
           click: (event) => {
-            console.log('clicked save btn');
-
             event.preventDefault();
             const avatar: any = document.getElementById('avatar');
             const form = new FormData();
@@ -194,11 +182,7 @@ export default class ProfilePage extends Block {
 
               UserController.changeUserAvatar(form);
 
-              const modal = document.querySelector('.modal');
-              if (modal && event.target === modal) {
-                console.log('change avatar modal atach', event.target);
-                modal?.classList.add('hidde');
-              }
+              store.set('changeAvatarModalFlag', false);
             }
           },
         },
@@ -219,8 +203,6 @@ export default class ProfilePage extends Block {
         {
           events: {
             click: (e) => {
-              console.log('click left panel icon');
-
               router.back();
             },
           },

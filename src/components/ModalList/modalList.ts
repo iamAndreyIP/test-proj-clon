@@ -24,20 +24,18 @@ class ModalList extends Block {
         const modal = document.querySelector('.modal');
 
         if (modal && e.target === modal) {
-          store.set('modalListFlag', false);
+          store.set('openUsersListFlag', false);
         }
       },
     };
   }
 
   protected addChild(): void {
-    console.log('ADD CHILD');
     this.children.usersOflist = this.createItem(this.props);
   }
 
   componentDidUpdate(oldProps: any, newProps: any): boolean {
     newProps;
-    console.log('UPDATE MODAL LIST ATACH');
     this.children.usersOflist = this.createItem(newProps);
 
     return true;
@@ -51,12 +49,6 @@ class ModalList extends Block {
         events: {
           click: () => {
             console.log('click');
-
-            // const userList = store
-            //   .getState()
-            //   .usersOflist.filter((user) => user.login != item.login);
-
-            // store.set('usersOflist', userList || []);
           },
         },
         deleteUserFromChatIcon: new Icon(
@@ -80,7 +72,7 @@ class ModalList extends Block {
   }
 }
 
-function connect(mapStateToProps: (state: any) => any) {
+export function connect(mapStateToProps: (state: any) => any) {
   return function (component: typeof Block) {
     return class extends component {
       constructor(props) {
@@ -100,9 +92,6 @@ function connect(mapStateToProps: (state: any) => any) {
     };
   };
 }
-
-store.set('usersOflist', [{ login: 'Gueset1' }, { login: 'Gueset2' }]);
-store.set('modalListFlag', true);
 
 export const WithStore = connect((state) => ({
   usersOflist: state.usersOflist || [],
