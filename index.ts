@@ -6,6 +6,9 @@ import RegistrationPageNew from './src/pages/registrationPage/registrationPage2'
 import ProfilePage from './src/pages/profilePage/profilePage';
 import Router from './src/utils/Router';
 import AuthController from './src/controllers/authcontroller';
+import store from './src/utils/store';
+//@ts-ignore
+window.store = store;
 
 export const router = new Router();
 
@@ -14,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .use('/', LoginPageNew)
     .use('/sign-up', RegistrationPageNew)
     .use('/messanger', ChatPage)
-    .use('/profile', ProfilePage)
+    .use('/settings', ProfilePage)
     .use('/500', ServerErrorPage)
     .use('*', NotfoundPage);
 
