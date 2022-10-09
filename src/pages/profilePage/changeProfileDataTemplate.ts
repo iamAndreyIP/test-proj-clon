@@ -55,7 +55,7 @@ export const template = `
                     Пароль
                 </span>
                 <span class="list-item--light">
-                    <input type="password" class="change-data-profile" name="password"/>
+                    <input type="password" class="change-data-profile" name="password" placeholder="Текущий пароль"/>
                 </span>
             </li>
             <li class="profile__list-data-item ">
@@ -63,7 +63,7 @@ export const template = `
                     Новый пароль
                 </span>
                 <span class="list-item--light">
-                    <input type="password" class="change-data-profile" name="new_password"/>
+                    <input type="password" class="change-data-profile" name="new_password" placeholder="Новый  Пароль"/>
                 </span>
             </li>
             <li class="profile__list-data-item ">
@@ -71,7 +71,7 @@ export const template = `
                     Повторить новый пароль
                 </span>
                 <span class="list-item--light">
-                    <input type="password" class="change-data-profile" name="new_password2"/>
+                    <input type="password" class="change-data-profile" name="new_password2" placeholder="Повторить новый пароль"/>
                 </span>
             </li>
         </ul>

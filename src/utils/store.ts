@@ -1,5 +1,27 @@
 import EventBus from './eventBus';
-import { set } from './helpers';
+import { set, isEqual } from './helpers';
+import Block from './block';
+
+export function connect(mapStateToProps: (state: any) => any) {
+  return function (component: typeof Block) {
+    return class extends component {
+      constructor(props: {} | undefined) {
+        let previousState = mapStateToProps(store.getState());
+        super({ ...props, ...previousState });
+
+        store.on(StoreEvents.UPDATED, () => {
+          let newState = mapStateToProps(store.getState());
+
+          if (!isEqual(previousState, newState)) {
+            this.setProps({ ...newState });
+          }
+
+          previousState = newState;
+        });
+      }
+    };
+  };
+}
 
 export const StoreEvents = {
   UPDATED: 'update',
@@ -19,4 +41,6 @@ class Store extends EventBus {
   }
 }
 
-export default new Store();
+const store = new Store();
+
+export default store;

@@ -23,8 +23,6 @@ export default class Modal extends Block {
       click: (e) => {
         const modal = document.querySelector('.modal');
 
-        // console.log('modal atach');
-
         if (modal && e.target === modal) {
           store.set('changeAvatarModalFlag', false);
           store.set('deleteUserToChatFlag', false);

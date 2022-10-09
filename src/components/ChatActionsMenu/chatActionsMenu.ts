@@ -1,5 +1,5 @@
 import Block from '../../utils/block';
-import store, { StoreEvents } from '../../utils/store';
+import store, { connect } from '../../utils/store';
 import Icon from '../Icons/icons';
 import { Add } from '../Icons/iconsTemplates';
 
@@ -18,13 +18,9 @@ const template = `
 </div>
 `;
 
-export default class ChatMenuActions extends Block {
+export default class ChatMenuActionsBase extends Block {
   constructor(props: {} | undefined) {
-    super({ ...props, ...store.getState() });
-
-    store.on(StoreEvents.UPDATED, () => {
-      this.setProps({ ...store.getState() });
-    });
+    super({ ...props });
   }
 
   protected addChild(): void {
@@ -33,8 +29,6 @@ export default class ChatMenuActions extends Block {
         cls: 'add',
         events: {
           click: () => {
-            console.log('click add user');
-
             store.set('addUserToChatFlag', true);
           },
         },
@@ -47,7 +41,6 @@ export default class ChatMenuActions extends Block {
         cls: 'delete',
         events: {
           click: () => {
-            console.log('click delete user');
             store.set('deleteUserToChatFlag', true);
           },
         },
@@ -60,3 +53,8 @@ export default class ChatMenuActions extends Block {
     return this.compile(template, this.props);
   }
 }
+
+export const ChatMenuActions = connect((state) => ({
+  deleteUserToChatFlag: state.deleteUserToChatFlag,
+  addUserToChatFlag: state.addUserToChatFlag,
+}))(ChatMenuActionsBase);

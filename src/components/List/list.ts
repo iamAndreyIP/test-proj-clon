@@ -1,7 +1,7 @@
 import Block from '../../utils/block';
-import store, { StoreEvents } from '../../utils/store';
+import store from '../../utils/store';
 import { ListItem } from '../ListItem/listItem';
-import { connect } from '../ModalList/modalList';
+import { connect } from '../../utils/store';
 import ChatController from '../../controllers/chatController';
 
 const template = `
@@ -47,7 +47,6 @@ export class ListBase extends Block {
         ...chat,
         events: {
           click: async function () {
-            console.log('click', chat.id);
             ChatController.setPickedChatId(chat.id);
             ChatController.getUsersOfChat(chat.id);
             await ChatController.getToken(chat.id);
