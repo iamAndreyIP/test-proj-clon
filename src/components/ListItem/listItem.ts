@@ -1,6 +1,6 @@
 import Block from '../../utils/block';
 import { template } from './listItemTemplate';
-import { connect } from '../ModalList/modalList';
+import { connect } from '../../utils/store';
 
 export class ListItemBase extends Block {
   constructor(props: {} | undefined) {
@@ -8,7 +8,6 @@ export class ListItemBase extends Block {
   }
 
   render() {
-    console.log('listitem chat', this.props);
     return this.compile(template, {
       ...this.props,
       isPicked: this.props.id === this.props.pickedChatItem?.id,

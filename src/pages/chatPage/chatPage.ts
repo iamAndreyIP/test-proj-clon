@@ -8,16 +8,15 @@ import Button from '../../components/Button/button';
 import Modal from '../../components/Modal/modal';
 import Icon from '../../components/Icons/icons';
 import { ChevronRight } from '../../components/Icons/iconsTemplates';
-import store, { StoreEvents } from '../../utils/store';
+import store, { connect } from '../../utils/store';
 import PickedChat from '../../components/PickedChat/pickedChat';
 import ChatController from '../../controllers/chatController';
 
-import { WithStore } from '../../components/ModalList/modalList';
+import { ModalList } from '../../components/ModalList/modalList';
 
 function mapStateToProps(state: any) {
   return {
     addChatFlag: state.addChatFlag,
-    pickedChat1: state.pickedChat1,
     pickedChatFlag: state.pickedChatFlag,
     addUserToChatFlag: state.addUserToChatFlag,
     deleteUserToChatFlag: state.deleteUserToChatFlag,
@@ -28,13 +27,9 @@ function mapStateToProps(state: any) {
   };
 }
 
-export default class ChatPage extends Block {
-  constructor(props) {
-    super({ ...props, ...mapStateToProps(store.getState()) });
-
-    store.on(StoreEvents.UPDATED, () => {
-      this.setProps({ ...mapStateToProps(store.getState()) });
-    });
+export default class ChatPageBase extends Block {
+  constructor(props: {} | undefined) {
+    super({ ...props });
 
     this.props.pickedChatFlag = false;
 
@@ -120,14 +115,12 @@ export default class ChatPage extends Block {
         buttonText: 'Добавить',
         events: {
           click: (e) => {
-
             const input: HTMLInputElement | null =
               document.querySelector('.input');
 
             if (input && input.value) {
-
               const value = input.value;
-              const id = store.getState().pickedChatItem.id;
+              const id = store.getState().pickedChatId;
 
               const chatData: { users: any; chatId: any } = {
                 users: [],
@@ -173,7 +166,7 @@ export default class ChatPage extends Block {
 
             if (input && input.value) {
               const value = input.value;
-              const id = store.getState().pickedChatItem.id;
+              const id = store.getState().pickedChatId;
 
               const chatData: { users: any; chatId: any } = {
                 users: [],
@@ -192,7 +185,7 @@ export default class ChatPage extends Block {
       }),
     });
 
-    this.children.modalList = new WithStore({});
+    this.children.modalList = new ModalList({});
   }
 
   protected render(): DocumentFragment {
@@ -200,5 +193,4 @@ export default class ChatPage extends Block {
   }
 }
 
-//@ts-ignore
-window.chatCtr = ChatController;
+export const ChatPage = connect(mapStateToProps)(ChatPageBase);

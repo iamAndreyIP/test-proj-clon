@@ -1,7 +1,7 @@
 import Link from '../../components/Link/link';
 import Button from '../../components/Button/button';
 import Block from '../../utils/block';
-import Avatar from '../../components/Avatar/avatar';
+import { Avatar } from '../../components/Avatar/avatar';
 import store, { StoreEvents } from '../../utils/store';
 import AuthController from '../../controllers/authcontroller';
 import { template } from './profilePageTemplate';
@@ -19,6 +19,7 @@ function mapStateToProps(state: any) {
   return {
     changeAvatarModalFlag: state.changeAvatarModalFlag,
     currentUser: state.currentUser,
+    changeDataFlag: state.changeDataFlag,
   };
 }
 
@@ -29,9 +30,7 @@ export default class ProfilePage extends Block {
     store.on(StoreEvents.UPDATED, () => {
       this.setProps({ ...mapStateToProps(store.getState()) });
       this.children.changeData.setProps({
-        currentUser: store.getState().currentUser,
-        changeDataFlag: store.getState().changeDataFlag,
-        changeAvatarModalFlag: store.getState().changeAvatarModalFlag,
+        ...mapStateToProps(store.getState()),
       });
     });
   }

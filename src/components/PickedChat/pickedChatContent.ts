@@ -1,5 +1,5 @@
 import Block from '../../utils/block';
-import { connect } from '../ModalList/modalList';
+import { connect } from '../../utils/store';
 
 const template = `
 <div class="picked-chat__content">
@@ -44,6 +44,10 @@ const template = `
 export default class PickedChatContent extends Block {
   constructor(props: {} | undefined) {
     super(props);
+  }
+
+  componentDidMount(oldProps?: any): void {
+    console.log('MOUNT', this);
   }
 
   protected render(): DocumentFragment {

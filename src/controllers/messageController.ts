@@ -74,11 +74,8 @@ class MessageController {
     let allMessages: any[] = [];
 
     if (Array.isArray(messages)) {
-      console.log('ARRAY', messages);
       allMessages = messages.map((m) => this.formatMessage(m)).reverse();
     } else {
-      console.log('NOT ARRAY', messages);
-      //{content: '90824', type: 'user connected}
       allMessages.push(this.formatMessage(messages));
     }
 

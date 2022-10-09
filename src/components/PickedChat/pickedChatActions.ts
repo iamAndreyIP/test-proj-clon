@@ -33,12 +33,8 @@ export default class PickedChatActions extends Block {
       events: {
         keypress: function (event: any) {
           if (this && this.value.length > 0 && event.key === 'Enter') {
-          
-
             const value: string = (this as HTMLInputElement).value;
             const chatId = store.getState().pickedChatId;
-
-          
 
             MessageController.sendMessage(chatId, value);
 
@@ -58,12 +54,13 @@ export default class PickedChatActions extends Block {
 
             if (input && input.value.length > 0) {
               const value = input.value;
-              const chatId = store.getState().pickedChatItem.id;
-              //?
+              const chatId = store.getState().pickedChatId;
+
               value.length
                 ? MessageController.sendMessage(chatId, value)
                 : null;
               input.value = '';
+              input.focus();
             }
           },
         },

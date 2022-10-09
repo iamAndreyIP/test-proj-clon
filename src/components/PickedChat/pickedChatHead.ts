@@ -1,6 +1,6 @@
 import Block from '../../utils/block';
 import store from '../../utils/store';
-import ChatMenuActions from '../ChatActionsMenu/chatActionsMenu';
+import { ChatMenuActions } from '../ChatActionsMenu/chatActionsMenu';
 import Icon from '../Icons/icons';
 import { ThreeDots } from '../Icons/iconsTemplates';
 import { withStore } from '../ListItem/listItem';

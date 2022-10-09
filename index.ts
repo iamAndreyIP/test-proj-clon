@@ -1,6 +1,6 @@
 import NotfoundPage from './src/pages/404Page/notFoundPage';
 import ServerErrorPage from './src/pages/500Page/serverErrorPage';
-import ChatPage from './src/pages/chatPage/chatPage';
+import { ChatPage } from './src/pages/chatPage/chatPage';
 import LoginPageNew from './src/pages/loginPage/loginPage2';
 import RegistrationPageNew from './src/pages/registrationPage/registrationPage2';
 import ProfilePage from './src/pages/profilePage/profilePage';
@@ -8,7 +8,6 @@ import Router from './src/utils/Router';
 import AuthController from './src/controllers/authcontroller';
 
 export const router = new Router();
-
 
 document.addEventListener('DOMContentLoaded', () => {
   router

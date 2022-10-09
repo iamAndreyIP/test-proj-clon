@@ -1,6 +1,6 @@
 import Block from '../../utils/block';
 import PickedChatActions from './pickedChatActions';
-import PickedChatContent, { PickedChatContent2 } from './pickedChatContent';
+import { PickedChatContent2 } from './pickedChatContent';
 import { PickedChatHead } from './pickedChatHead';
 import store, { StoreEvents } from '../../utils/store';
 

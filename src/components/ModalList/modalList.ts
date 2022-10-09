@@ -1,6 +1,5 @@
 import Block from '../../utils/block';
-import { isEqual } from '../../utils/helpers';
-import store, { StoreEvents } from '../../utils/store';
+import store, { connect } from '../../utils/store';
 import Icon from '../Icons/icons';
 import { Add } from '../Icons/iconsTemplates';
 import { template, templateItem } from './modalListTemplate';
@@ -15,7 +14,7 @@ class ModalListItem extends Block {
   }
 }
 
-class ModalList extends Block {
+class ModalListBase extends Block {
   constructor(props: {} | undefined) {
     super({ ...props });
 
@@ -72,28 +71,7 @@ class ModalList extends Block {
   }
 }
 
-export function connect(mapStateToProps: (state: any) => any) {
-  return function (component: typeof Block) {
-    return class extends component {
-      constructor(props) {
-        let state = mapStateToProps(store.getState());
-        super({ ...props, ...state });
-
-        store.on(StoreEvents.UPDATED, () => {
-          let newState = mapStateToProps(store.getState());
-
-          if (!isEqual(state, newState)) {
-            this.setProps({ ...newState });
-          }
-
-          state = newState;
-        });
-      }
-    };
-  };
-}
-
-export const WithStore = connect((state) => ({
+export const ModalList = connect((state) => ({
   usersOflist: state.usersOflist || [],
   modalListFlag: state.modalListFlag,
-}))(ModalList);
+}))(ModalListBase);

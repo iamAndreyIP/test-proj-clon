@@ -14,7 +14,7 @@ export const template = `
         {{else}}
 
             <div class="modal__conten-list-item-text">
-                Users of list is empty, yet
+                Нет пользователей в этом чате
             </div>
 
         {{/if}}
@@ -27,6 +27,8 @@ export const templateItem = `
 <div class="modal__conten-list-item">
     <div class="modal__conten-list-item-text">
         {{login}} - {{id}}
+        <br/>
+        Role - {{role}}
     </div>
 
     <div class="modal__conten-list-item-icon">

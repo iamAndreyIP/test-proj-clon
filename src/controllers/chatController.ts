@@ -1,5 +1,4 @@
 import API, { ChatApi } from '../api/chatApi';
-// import ListItem from '../components/ListItem/listItem';
 import store from '../utils/store';
 import MessageController from './messageController';
 
@@ -72,9 +71,7 @@ export class ChatController {
       if (!res.response.includes('reason')) {
         const users = JSON.parse(res.response);
 
-        const logins = users.filter((user) => user.role === 'regular');
-
-        store.set('usersOflist', logins || []);
+        store.set('usersOflist', users || []);
       } else {
         console.log(res.response);
       }
