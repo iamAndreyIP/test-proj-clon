@@ -12,7 +12,7 @@ window.store = store;
 
 export const router = new Router();
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   router
     .use('/', LoginPageNew)
     .use('/sign-up', RegistrationPageNew)
@@ -21,8 +21,18 @@ document.addEventListener('DOMContentLoaded', () => {
     .use('/500', ServerErrorPage)
     .use('*', NotfoundPage);
 
-  let login = localStorage.getItem('login');
   let isProtected = true;
+
+  // if (
+  //   window.location.pathname === '/' ||
+  //   window.location.pathname === '/sign-up'
+  // ) {
+  //   isProtected = true;
+  // } else {
+  //   isProtected = false;
+  // }
+
+  // console.log(window.location.pathname);
 
   switch (window.location.pathname) {
     case '/':
@@ -31,16 +41,23 @@ document.addEventListener('DOMContentLoaded', () => {
       break;
   }
 
-  if (login) {
-    AuthController.fetchUser();
+  try {
+    await AuthController.fetchUser();
 
-    router.start();
     if (!isProtected) {
       router.go('/messanger');
     }
-  } else {
-    router.start();
 
-    router.go('/');
+    router.start();
+    console.log('try');
+  } catch (e) {
+    console.log('cathc');
+
+    if (isProtected) {
+      router.go('/');
+    }
+    router.start();
   }
+  // console.log('protected', isProtected);
+  // router.start();
 });
