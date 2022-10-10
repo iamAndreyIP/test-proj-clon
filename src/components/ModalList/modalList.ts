@@ -3,9 +3,16 @@ import store, { connect } from '../../utils/store';
 import Icon from '../Icons/icons';
 import { Add } from '../Icons/iconsTemplates';
 import { template, templateItem } from './modalListTemplate';
+import { User } from '../../api/authApi';
+
+type ModalListItemType = {
+  login: string;
+  role: string;
+  deleteUserFromChatIcon: Icon;
+};
 
 class ModalListItem extends Block {
-  constructor(props: {} | undefined) {
+  constructor(props: {} | ModalListItemType) {
     super({ ...props });
   }
 
@@ -14,8 +21,26 @@ class ModalListItem extends Block {
   }
 }
 
+// type ModalListBaseType = {
+//   id: number;
+//   first_name: 'petya';
+//   second_name: 'petrov';
+//   display_name: 'petya petrov';
+//   login: 'my-login';
+//   email: 'my@email.com';
+//   phone: '89223332211';
+//   avatar: '/path/to/my-file.jpg';
+//   role: 'admin';
+// };
+
+//дополнить тип/интерфейс узнать
+interface ModalListBaseType extends User {
+  role: string;
+  display_name: string;
+}
+
 class ModalListBase extends Block {
-  constructor(props: {} | undefined) {
+  constructor(props: ModalListBaseType | {}) {
     super({ ...props });
 
     this.props.events = {
@@ -40,9 +65,9 @@ class ModalListBase extends Block {
     return true;
   }
 
-  private createItem(props) {
+  private createItem(props: { usersOflist: any }) {
     props;
-    return (props?.usersOflist || []).map((item) => {
+    return (props?.usersOflist || []).map((item: ModalListBaseType) => {
       return new ModalListItem({
         ...item,
         events: {

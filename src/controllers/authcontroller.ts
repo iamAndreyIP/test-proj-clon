@@ -57,6 +57,7 @@ export class AuthController {
     const response: any = await this.api.read();
 
     if (response.response.includes('reason')) {
+      console.log(response.response);
       throw new Error('soe err');
       // router.go('/');
       // } else {

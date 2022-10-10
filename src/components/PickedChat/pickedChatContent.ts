@@ -41,13 +41,32 @@ const template = `
 </div>
 `;
 
-export default class PickedChatContent extends Block {
-  constructor(props: {} | undefined) {
-    super(props);
-  }
+interface Message {
+  chat_id: number;
+  time: string;
+  type: string;
+  user_id: number;
+  content: string;
+  file?: {
+    id: number;
+    user_id: number;
+    path: string;
+    filename: string;
+    content_type: string;
+    content_size: number;
+    upload_date: string;
+  };
+}
 
-  componentDidMount(oldProps?: any): void {
-    console.log('MOUNT', this);
+type PickedChatContentType = {
+  pickedChatId: number | undefined;
+  messages: Message[];
+  userId: number;
+};
+
+export default class PickedChatContent extends Block {
+  constructor(props: PickedChatContentType) {
+    super(props);
   }
 
   protected render(): DocumentFragment {

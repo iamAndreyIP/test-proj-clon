@@ -23,17 +23,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   let isProtected = true;
 
-  // if (
-  //   window.location.pathname === '/' ||
-  //   window.location.pathname === '/sign-up'
-  // ) {
-  //   isProtected = true;
-  // } else {
-  //   isProtected = false;
-  // }
-
-  // console.log(window.location.pathname);
-
   switch (window.location.pathname) {
     case '/':
     case '/sign-up':
@@ -58,6 +47,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     router.start();
   }
-  // console.log('protected', isProtected);
-  // router.start();
 });
