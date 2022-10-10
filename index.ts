@@ -6,19 +6,21 @@ import RegistrationPageNew from './src/pages/registrationPage/registrationPage2'
 import ProfilePage from './src/pages/profilePage/profilePage';
 import Router from './src/utils/Router';
 import AuthController from './src/controllers/authcontroller';
+import store from './src/utils/store';
+//@ts-ignore
+window.store = store;
 
 export const router = new Router();
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   router
     .use('/', LoginPageNew)
     .use('/sign-up', RegistrationPageNew)
     .use('/messanger', ChatPage)
-    .use('/profile', ProfilePage)
+    .use('/settings', ProfilePage)
     .use('/500', ServerErrorPage)
     .use('*', NotfoundPage);
 
-  let login = localStorage.getItem('login');
   let isProtected = true;
 
   switch (window.location.pathname) {
@@ -28,16 +30,21 @@ document.addEventListener('DOMContentLoaded', () => {
       break;
   }
 
-  if (login) {
-    AuthController.fetchUser();
+  try {
+    await AuthController.fetchUser();
 
-    router.start();
     if (!isProtected) {
       router.go('/messanger');
     }
-  } else {
-    router.start();
 
-    router.go('/');
+    router.start();
+    console.log('try');
+  } catch (e) {
+    console.log('cathc');
+
+    if (isProtected) {
+      router.go('/');
+    }
+    router.start();
   }
 });

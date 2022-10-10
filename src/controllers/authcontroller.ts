@@ -2,6 +2,7 @@ import API, { AuthApi, SigninData, SignupData } from '../api/authApi';
 import { router } from '../../index';
 import store from '../utils/store';
 import MessageController from '../controllers/messageController';
+import ChatController from './chatController';
 
 export class AuthController {
   private readonly api: AuthApi;
@@ -22,6 +23,8 @@ export class AuthController {
         localStorage.setItem('login', data.login);
 
         await this.fetchUser();
+
+        await ChatController.fetchChats();
 
         router.go('/messanger');
 
@@ -51,19 +54,21 @@ export class AuthController {
   }
 
   async fetchUser() {
-    try {
-      const response: any = await this.api.read();
+    const response: any = await this.api.read();
 
-      if (!response.response.includes('reason')) {
-        const user = JSON.parse(response.response);
-
-        store.set('currentUser', user);
-      } else {
-        router.go('/');
-      }
-    } catch (error) {
-      console.error(error.message);
+    if (response.response.includes('reason')) {
+      console.log(response.response);
+      throw new Error('soe err');
+      // router.go('/');
+      // } else {
+      //   router.go('/messanger');
     }
+
+    const user = JSON.parse(response.response);
+
+    store.set('currentUser', user);
+
+    // return response.response;
   }
 
   async logout() {
@@ -73,6 +78,10 @@ export class AuthController {
       localStorage.removeItem('login');
 
       MessageController.allClose();
+
+      store.clearStore();
+
+      console.log(store.getState());
 
       router.go('/');
     } catch (error) {

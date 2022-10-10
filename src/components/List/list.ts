@@ -1,8 +1,9 @@
 import Block from '../../utils/block';
 import store from '../../utils/store';
-import { ListItem } from '../ListItem/listItem';
+import { ListItem, ListItemBase } from '../ListItem/listItem';
 import { connect } from '../../utils/store';
 import ChatController from '../../controllers/chatController';
+import Button from '../Button/button';
 
 const template = `
 <ul class="menu__list list" width="310">
@@ -19,14 +20,14 @@ const template = `
 </ul>
 `;
 
-type listType = {
-  addChatButton: Block;
-  listOfChat?: Block[];
+type ListType = {
+  addChatButton: Button;
+  listOfChat?: ListItemBase[];
   events?: { [key: string]: (e: Event) => void };
 };
 
 export class ListBase extends Block {
-  constructor(props: listType) {
+  constructor(props: ListType) {
     super({
       ...props,
     });
