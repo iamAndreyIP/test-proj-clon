@@ -58,17 +58,12 @@ export class AuthController {
 
     if (response.response.includes('reason')) {
       console.log(response.response);
-      throw new Error('soe err');
-      // router.go('/');
-      // } else {
-      //   router.go('/messanger');
+      throw new Error('some err');
     }
 
     const user = JSON.parse(response.response);
 
     store.set('currentUser', user);
-
-    // return response.response;
   }
 
   async logout() {

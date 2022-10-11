@@ -28,7 +28,7 @@ export class ChatApi extends BaseApi {
     });
   }
 
-  addUser(chatData: { id: number; users: number[] }): Promise<unknown> {
+  addUser(chatData: { chatId: number; users: number[] }): Promise<unknown> {
     return this.http.put(`${this.endpoint}/users`, {
       data: JSON.stringify(chatData),
       mode: 'cors',

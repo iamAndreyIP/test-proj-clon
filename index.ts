@@ -38,13 +38,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     router.start();
-    console.log('try');
   } catch (e) {
-    console.log('cathc');
-
     if (isProtected) {
       router.go('/');
     }
+
     router.start();
   }
 });

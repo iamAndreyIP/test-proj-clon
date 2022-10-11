@@ -14,7 +14,7 @@ type ListItem = {
 };
 
 export class ListItemBase extends Block {
-  constructor(props: {} | undefined) {
+  constructor(props: {} | ListItem) {
     super(props);
   }
 

@@ -4,6 +4,7 @@ import { ListItem, ListItemBase } from '../ListItem/listItem';
 import { connect } from '../../utils/store';
 import ChatController from '../../controllers/chatController';
 import Button from '../Button/button';
+import { ChatInfo } from '../../api/chatApi';
 
 const template = `
 <ul class="menu__list list" width="310">
@@ -37,8 +38,8 @@ export class ListBase extends Block {
     this.children.listOfChat = this.createChat(this.props);
   }
 
-  private createChat(props) {
-    return props.listOfChat.map((chat) => {
+  private createChat(props: any) {
+    return props.listOfChat.map((chat: ChatInfo) => {
       if (chat.last_message) {
         const formatTime = chat.last_message.time.slice(11, 16);
 
@@ -61,7 +62,7 @@ export class ListBase extends Block {
     });
   }
 
-  componentDidUpdate(oldProps: any, newProps: any): boolean {
+  componentDidUpdate(oldProps: any, newProps: ListItemBase[]): boolean {
     this.children.chat = this.createChat(newProps);
 
     return true;

@@ -1,6 +1,6 @@
 import BaseApi from './baseApi';
 
-type ProfileData = {
+export type ProfileData = {
   first_name: string;
   second_name: string;
   login: string;

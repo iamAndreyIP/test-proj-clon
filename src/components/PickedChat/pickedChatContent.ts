@@ -1,5 +1,6 @@
 import Block from '../../utils/block';
 import { connect } from '../../utils/store';
+import { Message } from '../../controllers/messageController';
 
 const template = `
 <div class="picked-chat__content">
@@ -40,23 +41,6 @@ const template = `
       {{/if}}
 </div>
 `;
-
-interface Message {
-  chat_id: number;
-  time: string;
-  type: string;
-  user_id: number;
-  content: string;
-  file?: {
-    id: number;
-    user_id: number;
-    path: string;
-    filename: string;
-    content_type: string;
-    content_size: number;
-    upload_date: string;
-  };
-}
 
 type PickedChatContentType = {
   pickedChatId: number | undefined;
